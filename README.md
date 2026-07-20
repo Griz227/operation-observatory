@@ -63,7 +63,7 @@ History is what turns a dashboard into something you actually learn from.
 
 		  
 		  
-File Organization:
+## File Organization:
 observatory/
 
     backend/
