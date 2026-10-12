@@ -1,6 +1,6 @@
 async function loadSystems() {
 
-            const response = await fetch("/api/Systems");
+            const response = await fetch("/api/systems");
             const data = await response.json();
 
             document.getElementById("output").textContent =
