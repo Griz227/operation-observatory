@@ -110,3 +110,39 @@ Four cards.
 | 0.6     | Camera integration             |
 | 0.7     | Wildlife database              |
 | 0.8     | Charts and analytics           |
+
+
+## Configuration (backend/.env)
+
+Proxmox (Infrastructure card):
+
+| Key                  | Example            |
+| -------------------- | ------------------ |
+| PROXMOX_HOST         | 192.168.1.10       |
+| PROXMOX_PORT         | 8006               |
+| PROXMOX_USER         | observatory@pve    |
+| PROXMOX_TOKEN_ID     | dashboard          |
+| PROXMOX_TOKEN_SECRET | (your token)       |
+
+Weather (Weather card, data from Open-Meteo, no API key needed):
+
+| Key                   | Example      | Notes                                   |
+| --------------------- | ------------ | --------------------------------------- |
+| WEATHER_LAT           | 39.7392      | Required                                |
+| WEATHER_LON           | -104.9903    | Required                                |
+| WEATHER_LOCATION_NAME | Home         | Label shown on the card                 |
+| WEATHER_UNITS         | fahrenheit   | `fahrenheit` (mph + inches) or `celsius` (km/h + mm) |
+| WEATHER_TIMEZONE      | auto         | `auto` or an IANA zone like America/Denver |
+| WEATHER_FORECAST_DAYS | 7            | Daily forecast length to fetch (1-7). The UI can toggle 3d / 5d / 7d within that range. |
+
+Click the Weather card on the dashboard to open a details modal with precipitation, the next 12 hours of precip chance, and the daily forecast.
+
+The Nature card is a placeholder for a later eBird integration (and your own sightings). The Cameras card is the same kind of placeholder.
+
+The header shows the local time, date and a sunrise/sunset daylight bar (sunrise and sunset come from the weather feed).
+
+Run it from `backend/`:
+
+    uvicorn main:app --reload
+
+Then open http://127.0.0.1:8000.
