@@ -6,17 +6,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Operation Observatory</title>
 
+    <link rel="stylesheet" href="/static/css/styles.css">
+
     <!-- Load JavaScript after the page has finished parsing -->
     <script src="/static/js/app.js" defer></script>
 </head>
 
 <body>
 
-    <h1>Operation Observatory</h1>
+    <header class="topbar">
+        <div class="brand">
+            <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+                <circle cx="20" cy="20" r="17" />
+                <circle cx="20" cy="20" r="10" />
+                <circle class="brand-core" cx="20" cy="20" r="3" />
+                <line x1="20" y1="1" x2="20" y2="8" />
+                <line x1="20" y1="32" x2="20" y2="39" />
+                <line x1="1" y1="20" x2="8" y2="20" />
+                <line x1="32" y1="20" x2="39" y2="20" />
+            </svg>
+            <div>
+                <h1>Operation Observatory</h1>
+                <p class="brand-sub">Mission Control &middot; v0.1</p>
+            </div>
+        </div>
 
-    <h2>Systems</h2>
+        <div class="header-clock" aria-label="Local time and daylight">
+            <div class="clock">
+                <span class="clock-time readout" id="clock-time">--:--</span>
+                <span class="clock-seconds readout" id="clock-seconds">--</span>
+            </div>
+            <p class="clock-date">
+                <span id="clock-date">--</span>
+                <span class="clock-zone" id="clock-zone">--</span>
+            </p>
 
-    <pre id="output">Loading...</pre>
+            <div class="daylight">
+                <div class="daylight-labels">
+                    <span>Rise <b class="readout" id="sunrise-label">--:--</b></span>
+                    <span id="daylight-status">Awaiting weather</span>
+                    <span>Set <b class="readout" id="sunset-label">--:--</b></span>
+                </div>
+                <div class="daylight-track">
+                    <div class="daylight-fill" id="daylight-fill"></div>
+                    <div class="daylight-sun" id="daylight-sun"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry">
+            <div class="telemetry-item">
+                <span class="status-dot" id="global-status" data-status="pending"></span>
+                <span id="global-status-text">Initializing</span>
+            </div>
+            <div class="telemetry-item">
+                <span class="telemetry-label">Last sync</span>
+                <span class="readout" id="last-sync">--:--:--</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="grid">
+
+        <section class="card card-clickable" id="card-weather" data-state="loading"
+            role="button" tabindex="0" aria-haspopup="dialog"
+            aria-controls="weather-modal" aria-label="Open weather details">
+            <header class="card-header">
+                <span class="card-label">Weather</span>
+                <span class="card-meta" id="weather-location">--</span>
+                <span class="status-dot" data-status="pending"></span>
+            </header>
+            <div class="card-body" id="weather-body">
+                <p class="card-message">Acquiring signal&hellip;</p>
+            </div>
+            <p class="card-hint">Click for forecast &amp; precipitation</p>
+        </section>
+
+        <section class="card" id="card-systems" data-state="loading">
+            <header class="card-header">
+                <span class="card-label">Infrastructure</span>
+                <span class="card-meta" id="systems-count">--</span>
+                <span class="status-dot" data-status="pending"></span>
+            </header>
+            <div class="card-body" id="systems-body">
+                <p class="card-message">Contacting Proxmox&hellip;</p>
+            </div>
+        </section>
+
+        <section class="card" id="card-cameras" data-state="ready">
+            <header class="card-header">
+                <span class="card-label">Cameras</span>
+                <span class="card-meta">Integration pending</span>
+                <span class="status-dot" data-status="idle"></span>
+            </header>
+            <div class="card-body">
+                <div class="camera-grid">
+                    <div class="camera-tile">
+                        <span class="camera-name">CAM 01 &middot; Front</span>
+                        <span class="camera-feed">No feed</span>
+                    </div>
+                    <div class="camera-tile">
+                        <span class="camera-name">CAM 02 &middot; Driveway</span>
+                        <span class="camera-feed">No feed</span>
+                    </div>
+                    <div class="camera-tile">
+                        <span class="camera-name">CAM 03 &middot; Backyard</span>
+                        <span class="camera-feed">No feed</span>
+                    </div>
+                    <div class="camera-tile">
+                        <span class="camera-name">CAM 04 &middot; Garden</span>
+                        <span class="camera-feed">No feed</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="card-nature" data-state="ready">
+            <header class="card-header">
+                <span class="card-label">Nature</span>
+                <span class="card-meta">Integration pending</span>
+                <span class="status-dot" data-status="idle"></span>
+            </header>
+            <div class="card-body">
+                <div class="camera-grid">
+                    <div class="camera-tile">
+                        <span class="camera-name">Notable birds</span>
+                        <span class="camera-feed">No data</span>
+                    </div>
+                    <div class="camera-tile">
+                        <span class="camera-name">Wildlife</span>
+                        <span class="camera-feed">No data</span>
+                    </div>
+                    <div class="camera-tile">
+                        <span class="camera-name">Plants</span>
+                        <span class="camera-feed">No data</span>
+                    </div>
+                    <div class="camera-tile">
+                        <span class="camera-name">My sightings</span>
+                        <span class="camera-feed">No data</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <span>Home</span>
+        <span>Infrastructure</span>
+        <span>Nature</span>
+        <span>History</span>
+    </footer>
+
+    <div class="modal" id="weather-modal" hidden aria-hidden="true">
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-panel" role="dialog" aria-modal="true"
+            aria-labelledby="weather-modal-title">
+            <header class="modal-header">
+                <div>
+                    <p class="card-label">Weather details</p>
+                    <h2 id="weather-modal-title">--</h2>
+                </div>
+                <button type="button" class="modal-close" data-close-modal aria-label="Close">
+                    Close
+                </button>
+            </header>
+            <div class="modal-body" id="weather-modal-body">
+                <p class="card-message">No weather data yet</p>
+            </div>
+        </div>
+    </div>
 
 </body>
 

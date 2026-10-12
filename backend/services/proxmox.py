@@ -1,11 +1,14 @@
 import os
+from pathlib import Path
+
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
 
 def get_nodes():
+    load_dotenv(ENV_PATH, override=True)
 
     host = os.getenv("PROXMOX_HOST")
     port = os.getenv("PROXMOX_PORT")
@@ -24,7 +27,8 @@ def get_nodes():
     response = requests.get(
         url,
         headers=headers,
-        verify=False
+        verify=False,
+        timeout=5
     )
 
     response.raise_for_status()
